@@ -1,0 +1,77 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+  padding: 0 24px;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ── Left ── */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #E8192C;
+  cursor: pointer;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+
+.homeBtn {
+  color: #4A5568 !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border-radius: 6px !important;
+  transition: background 0.15s !important;
+}
+
+.homeBtn:hover {
+  background: #F4F6F9 !important;
+  color: #1A1A2E !important;
+}
+
+.homeBtn .p-button-icon {
+  font-size: 16px !important;
+}
+
+/* ── Right ── */
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.userArea {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.userArea:hover {
+  background: #F4F6F9;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  background: #E8192C;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

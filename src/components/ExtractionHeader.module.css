@@ -1,0 +1,119 @@
+.wrapper {
+  margin-bottom: 16px;
+}
+
+/* ─── Title row ─── */
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.pageTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1A1A2E;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.countBadge {
+  font-size: 14px;
+  font-weight: 500;
+  color: #718096;
+}
+
+/* ─── Buttons ─── */
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.refreshBtn {
+  color: #4A5568 !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  padding: 8px 14px !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 6px !important;
+  background: #ffffff !important;
+  height: 38px !important;
+  transition: background 0.15s, border-color 0.15s !important;
+}
+
+.refreshBtn:hover:not(:disabled) {
+  background: #F4F6F9 !important;
+  border-color: #CBD5E0 !important;
+}
+
+.refreshBtn:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+.addBtn {
+  background: #E8192C !important;
+  border-color: #E8192C !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  padding: 8px 18px !important;
+  border-radius: 6px !important;
+  height: 38px !important;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s !important;
+}
+
+.addBtn:hover {
+  background: #C4172A !important;
+  border-color: #C4172A !important;
+  box-shadow: 0 2px 6px rgba(232, 25, 44, 0.3) !important;
+}
+
+.addBtn:active {
+  background: #A81325 !important;
+}
+
+/* ─── Timestamp ─── */
+.refreshedAt {
+  font-size: 12.5px;
+  color: #718096;
+  text-align: right;
+  margin: 2px 0 0 0;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .refreshedAt {
+    text-align: left;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .addBtn {
+    font-size: 12px !important;
+    padding: 7px 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageTitle {
+    font-size: 18px;
+  }
+}

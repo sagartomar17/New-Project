@@ -171,11 +171,11 @@ const AddExtractionModal = ({ visible, onHide, onSubmit }) => {
               Upload PDF manifest with SharePoint document links
             </small>
 
-            {/* hidden file input */}
+            {/* hidden file input — no accept filter so user can pick any file;
+                non-PDF files are caught by processFile and trigger the error popup */}
             <input
               ref={fileInputRef}
               type="file"
-              accept=".pdf,application/pdf"
               onChange={handleFileInputChange}
               style={{ display: 'none' }}
             />

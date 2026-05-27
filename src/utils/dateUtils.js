@@ -10,6 +10,7 @@ export const isSameDay = (a, b) =>
 
 /**
  * Formats a Date into "DD-Mon-YYYY HH:MM:SS UTC" display string.
+ * Used for the "Last refreshed at" timestamp.
  * @param {Date} date
  * @returns {string}
  */
@@ -18,4 +19,17 @@ export const formatRefreshTime = (date) => {
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
   const pad = (n) => String(n).padStart(2, '0')
   return `${pad(d.getDate())}-${MONTHS[d.getMonth()]}-${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} UTC`
+}
+
+/**
+ * Formats a Date into "DD-Mon-YYYY HH:MM" display string.
+ * Used for table record dates.
+ * @param {Date} date
+ * @returns {string}
+ */
+export const formatRecordDate = (date) => {
+  const d = date || new Date()
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  const pad = (n) => String(n).padStart(2, '0')
+  return `${pad(d.getDate())}-${MONTHS[d.getMonth()]}-${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }

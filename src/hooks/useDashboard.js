@@ -1,19 +1,19 @@
 import { useState, useRef, useCallback } from 'react'
 import { EXTRACTION_REQUESTS } from '../data/mockExtractions'
-import { isSameDay, formatRefreshTime } from '../utils/dateUtils'
+import { isSameDay, formatRefreshTime, formatRecordDate } from '../utils/dateUtils'
 
 /**
  * Encapsulates all state and logic for the Dashboard page:
  *   – data + loading
  *   – column filters
  *   – pagination & sort
- *   – action handlers (refresh, add, view, download, file-click)
+ *   – action handlers (refresh, submitRequest, view, download, file-click)
  */
 const useDashboard = () => {
   const toastRef = useRef(null)
 
   /* ── data ── */
-  const [data]                                  = useState(EXTRACTION_REQUESTS)
+  const [data, setData]                          = useState(EXTRACTION_REQUESTS)
   const [lastRefreshed, setLastRefreshed]        = useState(formatRefreshTime(new Date('2026-05-13T11:28:41')))
   const [loading,       setLoading]              = useState(false)
 
@@ -53,11 +53,26 @@ const useDashboard = () => {
     }, 800)
   }, [])
 
-  const handleAddRequest = () =>
+  /** Called by AddExtractionModal on a valid PDF submit */
+  const handleSubmitRequest = useCallback((file, reqId) => {
+    const now = new Date()
+    const newRecord = {
+      id:           Date.now(),
+      requestedBy:  'Current User',
+      requestId:    reqId,
+      manifestFile: file.name,
+      dateCreated:  now.toISOString(),
+      dateDisplay:  formatRecordDate(now),
+      status:       'Pending',
+    }
+    setData((prev) => [newRecord, ...prev])
     toastRef.current?.show({
-      severity: 'info', summary: 'Add Request',
-      detail: 'Open new extraction request form.', life: 2500,
+      severity: 'success',
+      summary:  'Request Submitted',
+      detail:   `Extraction request ${reqId} has been submitted successfully.`,
+      life:     3000,
     })
+  }, [])
 
   const handleView = (row) =>
     toastRef.current?.show({
@@ -95,7 +110,7 @@ const useDashboard = () => {
     sortOrder, setSortOrder,
     /* handlers */
     handleRefresh,
-    handleAddRequest,
+    handleSubmitRequest,
     handleView,
     handleDownload,
     handleFileClick,

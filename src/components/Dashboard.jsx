@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Toast } from 'primereact/toast'
 import ExtractionHeader from './ExtractionHeader'
-import ExtractionTable  from './ExtractionTable'
-import useDashboard     from '../hooks/useDashboard'
-import styles           from './Dashboard.module.css'
+import ExtractionTable from './ExtractionTable'
+import AddExtractionModal from './AddExtractionModal'
+import useDashboard from '../hooks/useDashboard'
+import styles from './Dashboard.module.css'
 
 /**
  * Dashboard page — thin orchestration layer.
  * All state lives in useDashboard; UI is split into focused child components.
  */
 const Dashboard = () => {
+  const [showAddModal, setShowAddModal] = useState(false)
+
   const {
     toastRef,
     filteredData,
@@ -28,7 +31,7 @@ const Dashboard = () => {
     sortOrder, setSortOrder,
     /* handlers */
     handleRefresh,
-    handleAddRequest,
+    handleSubmitRequest,
     handleView,
     handleDownload,
     handleFileClick,
@@ -45,25 +48,44 @@ const Dashboard = () => {
           lastRefreshed={lastRefreshed}
           loading={loading}
           onRefresh={handleRefresh}
-          onAddRequest={handleAddRequest}
+          onAddRequest={() => setShowAddModal(true)}
         />
 
         {/* ── Data table with inline filters ── */}
         <ExtractionTable
           data={filteredData}
           loading={loading}
-          filterBy={filterBy}               setFilterBy={setFilterBy}
-          filterRequestId={filterRequestId} setFilterRequestId={setFilterRequestId}
-          filterFile={filterFile}           setFilterFile={setFilterFile}
-          filterDate={filterDate}           setFilterDate={setFilterDate}
-          filterStatus={filterStatus}       setFilterStatus={setFilterStatus}
-          rows={rows}           setRows={setRows}
-          first={first}         setFirst={setFirst}
-          sortField={sortField} setSortField={setSortField}
-          sortOrder={sortOrder} setSortOrder={setSortOrder}
+          filterBy={filterBy}
+          setFilterBy={setFilterBy}
+          filterRequestId={filterRequestId}
+          setFilterRequestId={setFilterRequestId}
+          filterFile={filterFile}
+          setFilterFile={setFilterFile}
+          filterDate={filterDate}
+          setFilterDate={setFilterDate}
+          filterStatus={filterStatus}
+          setFilterStatus={setFilterStatus}
+          rows={rows}
+          setRows={setRows}
+          first={first}
+          setFirst={setFirst}
+          sortField={sortField}
+          setSortField={setSortField}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
           onView={handleView}
           onDownload={handleDownload}
           onFileClick={handleFileClick}
+        />
+
+        {/* ── Add Extraction Request modal ── */}
+        <AddExtractionModal
+          visible={showAddModal}
+          onHide={() => setShowAddModal(false)}
+          onSubmit={(file, reqId) => {
+            handleSubmitRequest(file, reqId)
+            setShowAddModal(false)
+          }}
         />
       </div>
     </div>

@@ -150,3 +150,6 @@
   align-items: center;
   padding: 48px 24px;
 }
+:global(.p-column-title) {
+    color: black !important;
+}

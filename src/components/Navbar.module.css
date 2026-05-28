@@ -15,6 +15,7 @@
   z-index: 100;
 }
 
+
 /* ─────────────────────────────────────────────
    Left section
 ───────────────────────────────────────────── */
@@ -23,6 +24,7 @@
   align-items: center;
   gap: 12px;
 }
+
 
 .logo {
   font-size: 18px;
@@ -33,6 +35,7 @@
   letter-spacing: -0.02em;
 }
 
+
 .homeBtn {
   color: #4A5568 !important;
   width: 36px !important;
@@ -42,14 +45,17 @@
   transition: background 0.15s !important;
 }
 
+
 .homeBtn:hover {
   background: #F4F6F9 !important;
   color: #1A1A2E !important;
 }
 
+
 .homeBtn .p-button-icon {
   font-size: 16px !important;
 }
+
 
 /* ─────────────────────────────────────────────
    Right section
@@ -59,10 +65,12 @@
   align-items: center;
 }
 
+
 /* wrapper gives the dropdown a positioning context */
 .userWrapper {
   position: relative;
 }
+
 
 .userArea {
   display: flex;
@@ -75,10 +83,12 @@
   outline: none;
 }
 
+
 .userArea:hover,
 .userAreaActive {
   background: #F4F6F9;
 }
+
 
 .avatar {
   width: 34px;
@@ -91,15 +101,18 @@
   flex-shrink: 0;
 }
 
+
 .chevron {
   color: #4A5568;
   font-size: 11px;
   transition: transform 0.2s;
 }
 
+
 .chevronUp {
   transform: rotate(180deg);
 }
+
 
 /* ─────────────────────────────────────────────
    Dropdown menu
@@ -118,10 +131,12 @@
   animation: fadeSlideDown 0.15s ease;
 }
 
+
 @keyframes fadeSlideDown {
   from { opacity: 0; transform: translateY(-6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
 
 /* ── menu item ── */
 .dropdownItem {
@@ -141,10 +156,12 @@
   transition: background 0.12s, color 0.12s;
 }
 
+
 .dropdownItem:hover {
   background: #F4F6F9;
   color: #1A1A2E;
 }
+
 
 .dropdownItem i {
   font-size: 14px;
@@ -152,9 +169,11 @@
   flex-shrink: 0;
 }
 
+
 .dropdownItem:hover i {
   color: #374151;
 }
+
 
 /* Google icon wrapper */
 .itemIconGoogle {
@@ -163,6 +182,7 @@
   flex-shrink: 0;
 }
 
+
 /* ── divider ── */
 .divider {
   height: 1px;
@@ -170,12 +190,25 @@
   margin: 4px 0;
 }
 
+
 /* ── Log out: red tint on hover ── */
 .dropdownItemLogout:hover {
   background: #fff5f5 !important;
   color: #E8192C !important;
 }
 
+
 .dropdownItemLogout:hover i {
   color: #E8192C !important;
+}
+.initials {
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+.logo img {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }

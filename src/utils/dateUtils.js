@@ -1,3 +1,6 @@
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+const pad = (n) => String(n).padStart(2, '0')
+
 /**
  * Returns true when two Date values fall on the same calendar day.
  * @param {Date} a
@@ -16,8 +19,6 @@ export const isSameDay = (a, b) =>
  */
 export const formatRefreshTime = (date) => {
   const d = date || new Date()
-  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-  const pad = (n) => String(n).padStart(2, '0')
   return `${pad(d.getDate())}-${MONTHS[d.getMonth()]}-${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} UTC`
 }
 
@@ -29,7 +30,5 @@ export const formatRefreshTime = (date) => {
  */
 export const formatRecordDate = (date) => {
   const d = date || new Date()
-  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-  const pad = (n) => String(n).padStart(2, '0')
   return `${pad(d.getDate())}-${MONTHS[d.getMonth()]}-${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }

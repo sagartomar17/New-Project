@@ -10,11 +10,13 @@
   white-space: nowrap;
 }
 
+
 .completed {
   background: #E6F9EE;
   color: #1A7A44;
   border: 1px solid #B2EDD1;
 }
+
 
 .inProgress {
   background: #E3F0FA;
@@ -22,17 +24,20 @@
   border: 1px solid #A8D0EE;
 }
 
+
 .failed {
   background: #FEE2E2;
   color: #C53030;
   border: 1px solid #FCA5A5;
 }
 
+
 .pending {
   background: #FFF7E6;
   color: #B45309;
   border: 1px solid #FCD34D;
 }
+
 
 .default {
   background: #EDF2F7;

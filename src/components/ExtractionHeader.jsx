@@ -1,6 +1,6 @@
-import React from 'react'
-import { Button } from 'primereact/button'
-import styles from './ExtractionHeader.module.css'
+import React from "react";
+import { Button } from "primereact/button";
+import styles from "./ExtractionHeader.module.css";
 
 /**
  * Page header for the Dashboard:
@@ -17,7 +17,13 @@ import styles from './ExtractionHeader.module.css'
  *   onAddRequest: () => void,
  * }} props
  */
-const ExtractionHeader = ({ count, lastRefreshed, loading, onRefresh, onAddRequest }) => (
+const ExtractionHeader = ({
+  count,
+  lastRefreshed,
+  loading,
+  onRefresh,
+  onAddRequest,
+}) => (
   <div className={styles.wrapper}>
     <div className={styles.pageHeader}>
       {/* Title */}
@@ -29,7 +35,7 @@ const ExtractionHeader = ({ count, lastRefreshed, loading, onRefresh, onAddReque
       {/* Action buttons */}
       <div className={styles.headerActions}>
         <Button
-          icon={loading ? 'pi pi-spin pi-spinner' : 'pi pi-refresh'}
+          icon={loading ? "pi pi-spin pi-spinner" : "pi pi-refresh"}
           label="Refresh"
           className={`p-button-text p-button-plain ${styles.refreshBtn}`}
           onClick={onRefresh}
@@ -47,6 +53,6 @@ const ExtractionHeader = ({ count, lastRefreshed, loading, onRefresh, onAddReque
     {/* Timestamp */}
     <p className={styles.refreshedAt}>Last refreshed at: {lastRefreshed}</p>
   </div>
-)
+);
 
-export default ExtractionHeader
+export default ExtractionHeader;

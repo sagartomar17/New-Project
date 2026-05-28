@@ -33,6 +33,7 @@ const ExtractionTable = ({
   sortOrder, setSortOrder,
   /* action handlers */
   onView,
+  onDelete,
   onDownload,
   onFileClick,
 }) => {
@@ -48,6 +49,7 @@ const ExtractionTable = ({
 
   const actionsBody = (row) => (
     <div className={styles.actions}>
+      {/* Eye — view details */}
       <button
         className={styles.iconBtn}
         onClick={() => onView(row)}
@@ -56,6 +58,18 @@ const ExtractionTable = ({
       >
         <i className="pi pi-eye" />
       </button>
+
+      {/* Trash — delete row directly */}
+      <button
+        className={`${styles.iconBtn} ${styles.iconBtnDelete}`}
+        onClick={() => onDelete(row)}
+        title="Delete"
+        aria-label={`Delete ${row.requestId}`}
+      >
+        <i className="pi pi-trash" />
+      </button>
+
+      {/* Download */}
       <button
         className={styles.iconBtn}
         onClick={() => onDownload(row)}

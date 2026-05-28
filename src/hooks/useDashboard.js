@@ -3,11 +3,24 @@ import { EXTRACTION_REQUESTS } from '../data/mockExtractions'
 import { isSameDay, formatRefreshTime, formatRecordDate } from '../utils/dateUtils'
 
 /**
+ * Derives the next auto-generated request ID from the current dataset.
+ * Format: MAE-YYYY-NNNN  (e.g. MAE-2026-0007)
+ */
+const buildNextRequestId = (rows) => {
+  const year = new Date().getFullYear()
+  const max  = rows.reduce((acc, r) => {
+    const m = r.requestId?.match(/MAE-\d{4}-(\d+)/)
+    return m ? Math.max(acc, parseInt(m[1], 10)) : acc
+  }, 0)
+  return `MAE-${year}-${String(max + 1).padStart(4, '0')}`
+}
+
+/**
  * Encapsulates all state and logic for the Dashboard page:
  *   – data + loading
  *   – column filters
  *   – pagination & sort
- *   – action handlers (refresh, submitRequest, view, download, file-click)
+ *   – action handlers (refresh, submitRequest, view, download, delete, file-click)
  */
 const useDashboard = () => {
   const toastRef = useRef(null)
@@ -92,11 +105,26 @@ const useDashboard = () => {
       detail: `Opening ${row.manifestFile}`, life: 2500,
     })
 
+  /** Permanently removes a row from the dataset */
+  const handleDelete = useCallback((row) => {
+    setData((prev) => prev.filter((r) => r.id !== row.id))
+    toastRef.current?.show({
+      severity: 'success',
+      summary:  'Request Deleted',
+      detail:   `Extraction request ${row.requestId} has been deleted.`,
+      life:     3000,
+    })
+  }, [])
+
+  /** Auto-generated ID for the next new request (recomputed whenever data changes) */
+  const nextRequestId = buildNextRequestId(data)
+
   return {
     toastRef,
     filteredData,
     lastRefreshed,
     loading,
+    nextRequestId,
     /* filters */
     filterBy,        setFilterBy,
     filterRequestId, setFilterRequestId,
@@ -114,6 +142,7 @@ const useDashboard = () => {
     handleView,
     handleDownload,
     handleFileClick,
+    handleDelete,
   }
 }
 

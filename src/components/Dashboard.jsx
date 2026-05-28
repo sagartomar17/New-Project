@@ -1,23 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Toast } from 'primereact/toast'
 import ExtractionHeader from './ExtractionHeader'
-import ExtractionTable from './ExtractionTable'
-import AddExtractionModal from './AddExtractionModal'
-import useDashboard from '../hooks/useDashboard'
+import ExtractionTable  from './ExtractionTable'
+import AddExtractionPage from './AddExtractionPage'
+import ViewDetailPage    from './ViewDetailPage'
+import useDashboard      from '../hooks/useDashboard'
 import styles from './Dashboard.module.css'
 
 /**
- * Dashboard page — thin orchestration layer.
- * All state lives in useDashboard; UI is split into focused child components.
+ * Screen 1 — "All Requests Screen"
+ *
+ * view states:
+ *   'list' — normal table
+ *   'add'  — Add Extraction overlay
+ *   'view' — View Detail overlay
  */
 const Dashboard = () => {
-  const [showAddModal, setShowAddModal] = useState(false)
+  const [view,      setView]      = useState('list')
+  const [activeRow, setActiveRow] = useState(null)
 
   const {
     toastRef,
     filteredData,
     lastRefreshed,
     loading,
+    nextRequestId,
     /* filters */
     filterBy,        setFilterBy,
     filterRequestId, setFilterRequestId,
@@ -32,26 +39,40 @@ const Dashboard = () => {
     /* handlers */
     handleRefresh,
     handleSubmitRequest,
-    handleView,
     handleDownload,
     handleFileClick,
+    handleDelete,
   } = useDashboard()
+
+  /* ── lock body scroll when any overlay is open ── */
+  useEffect(() => {
+    document.body.style.overflow = view !== 'list' ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [view])
+
+  /* ── navigation helpers ── */
+  const openAdd  = ()    => setView('add')
+  const openView = (row) => { setActiveRow(row); setView('view') }
+  const goBack   = ()    => { setView('list'); setActiveRow(null) }
 
   return (
     <div className={styles.page}>
       <Toast ref={toastRef} position="top-right" />
 
-      <div className={styles.container}>
-        {/* ── Header: title + action buttons + timestamp ── */}
+      {/* ══════════════════════════════════════════
+          SCREEN 1 — All Requests
+          Dimmed (no blur) when overlay is open.
+      ══════════════════════════════════════════ */}
+      <div className={`${styles.container} ${view !== 'list' ? styles.blurred : ''}`}>
+
         <ExtractionHeader
           count={filteredData.length}
           lastRefreshed={lastRefreshed}
           loading={loading}
           onRefresh={handleRefresh}
-          onAddRequest={() => setShowAddModal(true)}
+          onAddRequest={openAdd}
         />
 
-        {/* ── Data table with inline filters ── */}
         <ExtractionTable
           data={filteredData}
           loading={loading}
@@ -73,21 +94,48 @@ const Dashboard = () => {
           setSortField={setSortField}
           sortOrder={sortOrder}
           setSortOrder={setSortOrder}
-          onView={handleView}
+          onView={openView}
+          onDelete={handleDelete}
           onDownload={handleDownload}
           onFileClick={handleFileClick}
         />
-
-        {/* ── Add Extraction Request modal ── */}
-        <AddExtractionModal
-          visible={showAddModal}
-          onHide={() => setShowAddModal(false)}
-          onSubmit={(file, reqId) => {
-            handleSubmitRequest(file, reqId)
-            setShowAddModal(false)
-          }}
-        />
       </div>
+
+      {/* ══════════════════════════════════════════
+          SCREEN 2 — Add Extraction Request overlay
+      ══════════════════════════════════════════ */}
+      {view === 'add' && (
+        <div
+          className={styles.overlay}
+          onClick={(e) => e.target === e.currentTarget && goBack()}
+        >
+          <AddExtractionPage
+            nextRequestId={nextRequestId}
+            onCancel={goBack}
+            onSubmit={(file, reqId) => {
+              handleSubmitRequest(file, reqId)
+              goBack()
+            }}
+          />
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════
+          View Detail overlay
+      ══════════════════════════════════════════ */}
+      {view === 'view' && (
+        <div
+          className={styles.overlay}
+          onClick={(e) => e.target === e.currentTarget && goBack()}
+        >
+          <ViewDetailPage
+            row={activeRow}
+            onClose={goBack}
+            onDelete={(row) => { handleDelete(row); goBack() }}
+            onDownload={handleDownload}
+          />
+        </div>
+      )}
     </div>
   )
 }

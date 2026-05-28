@@ -60,6 +60,21 @@
   background: #E2E8F0;
 }
 
+/* ─── Delete icon — red colour always (matches screenshot) ─── */
+.iconBtnDelete {
+  color: #E8192C !important;
+}
+.iconBtnDelete:hover {
+  background: #fee2e2 !important;
+  color: #C4172A !important;
+}
+
+/* ─── Legacy danger alias ─── */
+.iconBtnDanger:hover {
+  background: #fee2e2 !important;
+  color: #E8192C !important;
+}
+
 /* ─── Search wrapper (icon + input) ─── */
 .searchWrap {
   position: relative;
@@ -151,5 +166,6 @@
   padding: 48px 24px;
 }
 :global(.p-column-title) {
-    color: black !important;
+    color: #E8192C !important;
+    font-weight: 700 !important;
 }

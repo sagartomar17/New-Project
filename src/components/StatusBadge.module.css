@@ -1,0 +1,46 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 14px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+
+.completed {
+  background: #E6F9EE;
+  color: #1A7A44;
+  border: 1px solid #B2EDD1;
+}
+
+
+.inProgress {
+  background: #E3F0FA;
+  color: #1A5F8A;
+  border: 1px solid #A8D0EE;
+}
+
+
+.failed {
+  background: #FEE2E2;
+  color: #C53030;
+  border: 1px solid #FCA5A5;
+}
+
+
+.pending {
+  background: #FFF7E6;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+}
+
+
+.default {
+  background: #EDF2F7;
+  color: #4A5568;
+  border: 1px solid #CBD5E0;
+}

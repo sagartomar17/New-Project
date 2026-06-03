@@ -1,0 +1,202 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --takeda-red: #E8192C;
+  --takeda-red-dark: #C4172A;
+  --takeda-red-hover: #F5243A;
+  --brand-blue: #1D6FA4;
+  --text-primary: #1A1A2E;
+  --text-secondary: #4A5568;
+  --text-muted: #718096;
+  --bg-page: #F4F6F9;
+  --bg-white: #FFFFFF;
+  --bg-header: #FFFFFF;
+  --border-light: #E2E8F0;
+  --border-table: #EDF2F7;
+  --shadow-header: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.06);
+  --radius-card: 8px;
+  --status-green-bg: #E6F9EE;
+  --status-green-text: #1E7E4A;
+  --status-blue-bg: #E8F4FB;
+  --status-blue-text: #1D6FA4;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── PrimeReact overrides ─────────────────────────────────────── */
+
+/* Table */
+.p-datatable .p-datatable-thead > tr > th {
+  background: #fff !important;
+  color: var(--takeda-red) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  border-bottom: 2px solid var(--border-light) !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  padding: 12px 14px !important;
+  white-space: nowrap;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  border: none !important;
+  border-bottom: 1px solid var(--border-table) !important;
+  padding: 13px 14px !important;
+  font-size: 13.5px;
+  color: var(--text-primary);
+}
+
+.p-datatable .p-datatable-tbody > tr:hover > td {
+  background: #F9FAFB !important;
+}
+
+.p-datatable .p-datatable-tbody > tr:last-child > td {
+  border-bottom: none !important;
+}
+
+.p-datatable-wrapper {
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
+  overflow: hidden;
+}
+
+/* Filter row */
+.p-datatable .p-datatable-thead > tr.filter-row > th {
+  background: #FAFBFC !important;
+  border-bottom: 1px solid var(--border-light) !important;
+  padding: 8px 14px !important;
+}
+
+/* InputText */
+.p-inputtext {
+  border-radius: 6px !important;
+  border-color: #CBD5E0 !important;
+  font-size: 13px !important;
+  height: 36px !important;
+  padding: 0 10px !important;
+  color: var(--text-primary) !important;
+}
+
+.p-inputtext:focus {
+  box-shadow: 0 0 0 2px rgba(29,111,164,0.15) !important;
+  border-color: var(--brand-blue) !important;
+}
+
+/* Dropdown */
+.p-dropdown {
+  border-radius: 6px !important;
+  border-color: #CBD5E0 !important;
+  height: 36px !important;
+  min-width: 130px !important;
+}
+
+.p-dropdown .p-dropdown-label {
+  font-size: 13px !important;
+  line-height: 36px !important;
+  padding: 0 10px !important;
+  color: var(--text-muted) !important;
+}
+
+.p-dropdown:not(.p-disabled):hover {
+  border-color: var(--brand-blue) !important;
+}
+
+.p-dropdown:not(.p-disabled).p-focus {
+  box-shadow: 0 0 0 2px rgba(29,111,164,0.15) !important;
+  border-color: var(--brand-blue) !important;
+}
+
+/* Calendar */
+.p-calendar .p-inputtext {
+  border-radius: 6px !important;
+}
+
+.p-calendar .p-datepicker-trigger {
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-muted) !important;
+  padding: 0 8px !important;
+}
+
+/* Pagination */
+.p-paginator {
+  background: transparent !important;
+  border: none !important;
+  padding: 10px 14px !important;
+  justify-content: flex-end !important;
+  font-size: 13px !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: var(--takeda-red) !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+}
+
+.p-paginator .p-paginator-element {
+  border-radius: 4px !important;
+}
+
+/* Button */
+.p-button:focus {
+  box-shadow: none !important;
+}
+
+/* Sort icon */
+.p-sortable-column .p-sortable-column-icon {
+  color: var(--takeda-red) !important;
+  font-size: 11px !important;
+}
+
+/* Tag overrides */
+.p-tag {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  border-radius: 20px !important;
+  padding: 3px 12px !important;
+}
+
+/* Rows per page dropdown in paginator */
+.p-paginator .p-dropdown {
+  height: 30px !important;
+  min-width: 70px !important;
+}
+
+.p-paginator .p-dropdown .p-dropdown-label {
+  line-height: 30px !important;
+  font-size: 13px !important;
+}
+
+/* Input icon wrapper */
+.p-input-icon-left > .p-inputtext {
+  padding-left: 2rem !important;
+}
+.p-input-icon-left > i {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: var(--text-muted) !important;
+  font-size: 12px !important;
+}
+
+/* Calendar input group */
+.p-inputgroup .p-inputtext {
+  border-right: none !important;
+}
+
+/* Scrollable datatable */
+.p-datatable-scrollable-header {
+  background: #fff !important;
+}

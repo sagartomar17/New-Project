@@ -1,105 +1,109 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import styles from "./AddExtractionModal.module.css";
 
 /**
+ * AddExtractionModal
+ * ───────────────────
  * Modal for submitting a new M&A metadata extraction request.
- * The user types their own Request ID and uploads a PDF manifest.
+ *
+ * Behaviour
+ * ---------
+ * • On open: pre-fills the Request ID from the `nextRequestId` prop —
+ *   the field is editable so the user can override it.
+ * • File upload: drag-and-drop or click-to-browse; PDF only.
+ * • On submit: calls onExtractionCreated(requestId, fileName) which adds
+ *   the new row directly to the dashboard table (no backend needed).
  *
  * @param {{
- *   visible:  boolean,
- *   onHide:   () => void,
- *   onSubmit: (file: File, requestId: string) => void,
+ *   visible:                boolean,
+ *   onHide:                 () => void,
+ *   nextRequestId:          string,
+ *   onExtractionCreated:    (requestId: string, fileName: string) => void,
  * }} props
  */
-const AddExtractionModal = ({ visible, onHide, onSubmit }) => {
-  const [requestId, setRequestId] = useState("");
-  const [requestIdErr, setRequestIdErr] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [dragOver, setDragOver] = useState(false);
-  const [showPdfError, setShowPdfError] = useState(false);
-  const fileInputRef = useRef(null);
+const AddExtractionModal = ({ visible, onHide, nextRequestId, onExtractionCreated }) => {
+  /* ── Request ID state ── */
+  const [requestId, setRequestId] = useState("")
+
+  /* ── File state ── */
+  const [uploadedFile,  setUploadedFile]  = useState(null)
+  const [dragOver,      setDragOver]      = useState(false)
+  const [showFileError, setShowFileError] = useState(false)
+
+  const fileInputRef = useRef(null)
+
+  /* ── Pre-fill request ID whenever the modal opens ── */
+  useEffect(() => {
+    if (visible) {
+      setRequestId(nextRequestId)
+    }
+  }, [visible, nextRequestId])
 
   /* ── helpers ── */
   const isPdf = (file) =>
-    file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+    file.type === "application/pdf" ||
+    file.name.toLowerCase().endsWith(".pdf")
 
   const processFile = (file) => {
-    if (!isPdf(file)) {
-      setShowPdfError(true);
-      return;
-    }
-    setUploadedFile(file);
-  };
+    if (!isPdf(file)) { setShowFileError(true); return }
+    setUploadedFile(file)
+  }
 
   const resetAndClose = () => {
-    setRequestId("");
-    setRequestIdErr(false);
-    setUploadedFile(null);
-    setDragOver(false);
-    onHide();
-  };
+    setUploadedFile(null)
+    setDragOver(false)
+    setShowFileError(false)
+    setRequestId("")
+    onHide()
+  }
 
-  /* ── request ID input ── */
-  const handleRequestIdChange = (e) => {
-    setRequestId(e.target.value);
-    if (e.target.value.trim()) setRequestIdErr(false);
-  };
+  /* ── drag-and-drop ── */
+  const handleDragOver  = (e) => { e.preventDefault(); setDragOver(true) }
+  const handleDragLeave = ()  => setDragOver(false)
+  const handleDrop      = (e) => {
+    e.preventDefault()
+    setDragOver(false)
+    const file = e.dataTransfer.files[0]
+    if (file) processFile(file)
+  }
 
-  /* ── drag-and-drop handlers ── */
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setDragOver(true);
-  };
-  const handleDragLeave = () => setDragOver(false);
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file) processFile(file);
-  };
-
-  /* ── file-input handler ── */
+  /* ── file input ── */
   const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    if (file) processFile(file);
-    e.target.value = ""; // allow re-selecting same file after error
-  };
+    const file = e.target.files[0]
+    if (file) processFile(file)
+    e.target.value = ""
+  }
 
   /* ── submit ── */
-  const handleSubmit = () => {
-    const trimmed = requestId.trim();
-    if (!trimmed) {
-      setRequestIdErr(true);
-      return;
-    }
-    if (!uploadedFile) return;
-    onSubmit(uploadedFile, trimmed);
-    resetAndClose();
-  };
+  const handleSubmit = async () => {
+    if (!uploadedFile || !requestId.trim()) return
+    // Pass the actual File object (needed for multipart upload to the backend)
+    const success = await onExtractionCreated(requestId.trim(), uploadedFile)
+    if (success) resetAndClose()
+    // On failure the modal stays open so the user can see the error toast and retry
+  }
 
-  /* ── PDF error footer ── */
-  const pdfErrorFooter = (
+  /* ── derived values ── */
+  const canSubmit = !!uploadedFile && !!requestId.trim()
+
+  const dropZoneClass = [
+    styles.dropZone,
+    dragOver     ? styles.dropZoneActive  : "",
+    uploadedFile ? styles.dropZoneSuccess : "",
+  ].join(" ").trim()
+
+  /* ── file-error dialog footer ── */
+  const fileErrorFooter = (
     <div className={styles.pdfErrorFooter}>
       <Button
         label="OK"
         className={styles.submitBtn}
-        onClick={() => setShowPdfError(false)}
+        onClick={() => setShowFileError(false)}
       />
     </div>
-  );
-
-  /* ── drop-zone class composition ── */
-  const dropZoneClass = [
-    styles.dropZone,
-    dragOver ? styles.dropZoneActive : "",
-    uploadedFile ? styles.dropZoneSuccess : "",
-  ]
-    .join(" ")
-    .trim();
-
-  const canSubmit = requestId.trim().length > 0 && !!uploadedFile;
+  )
 
   return (
     <>
@@ -114,25 +118,25 @@ const AddExtractionModal = ({ visible, onHide, onSubmit }) => {
         className={styles.dialog}
       >
         <div className={styles.body}>
-          {/* ── Request ID (user-entered) ── */}
+
+          {/* ── Request ID ── */}
           <div className={styles.field}>
             <label className={styles.label}>
               Request ID <span className={styles.required}>*</span>
             </label>
+
             <input
               type="text"
-              className={`${styles.requestIdInput} ${requestIdErr ? styles.inputError : ""}`}
+              className={styles.requestIdInput}
               value={requestId}
-              onChange={handleRequestIdChange}
+              onChange={(e) => setRequestId(e.target.value)}
               placeholder="e.g. MAE-2026-0007"
-              autoFocus
+              aria-label="Request ID"
             />
-            {requestIdErr && (
-              <small className={styles.errorText}>
-                <i className="pi pi-exclamation-circle" /> Request ID is
-                required.
-              </small>
-            )}
+
+            <small className={styles.hint}>
+              Auto-generated — you may edit this before submitting.
+            </small>
           </div>
 
           {/* ── Manifest Upload ── */}
@@ -150,23 +154,18 @@ const AddExtractionModal = ({ visible, onHide, onSubmit }) => {
               role="button"
               tabIndex={0}
               onKeyDown={(e) =>
-                e.key === "Enter" &&
-                !uploadedFile &&
-                fileInputRef.current?.click()
+                e.key === "Enter" && !uploadedFile && fileInputRef.current?.click()
               }
-              aria-label="Upload PDF file"
+              aria-label="Upload PDF manifest file"
             >
               {uploadedFile ? (
-                /* ── selected file preview ── */
+                /* selected-file preview */
                 <div className={styles.filePreview}>
                   <i className="pi pi-file-pdf" />
                   <span className={styles.fileName}>{uploadedFile.name}</span>
                   <button
                     className={styles.removeBtn}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setUploadedFile(null);
-                    }}
+                    onClick={(e) => { e.stopPropagation(); setUploadedFile(null) }}
                     title="Remove file"
                     type="button"
                   >
@@ -174,7 +173,7 @@ const AddExtractionModal = ({ visible, onHide, onSubmit }) => {
                   </button>
                 </div>
               ) : (
-                /* ── empty state ── */
+                /* empty-state prompt */
                 <>
                   <i className="pi pi-cloud-upload" />
                   <p className={styles.dropText}>
@@ -189,11 +188,11 @@ const AddExtractionModal = ({ visible, onHide, onSubmit }) => {
               Upload PDF manifest with SharePoint document links
             </small>
 
-            {/* hidden file input — no accept filter so user can pick any file;
-                non-PDF files are caught by processFile and trigger the error popup */}
+            {/* hidden file input — PDF only */}
             <input
               ref={fileInputRef}
               type="file"
+              accept=".pdf,application/pdf"
               onChange={handleFileInputChange}
               style={{ display: "none" }}
             />
@@ -213,24 +212,25 @@ const AddExtractionModal = ({ visible, onHide, onSubmit }) => {
               disabled={!canSubmit}
             />
           </div>
+
         </div>
       </Dialog>
 
-      {/* ────────────── PDF validation error popup ────────────── */}
+      {/* ────────────── File-type validation error ────────────── */}
       <Dialog
         header="Invalid File Type"
-        visible={showPdfError}
+        visible={showFileError}
         style={{ width: "22rem" }}
-        onHide={() => setShowPdfError(false)}
+        onHide={() => setShowFileError(false)}
         draggable={false}
         resizable={false}
-        footer={pdfErrorFooter}
+        footer={fileErrorFooter}
         className={styles.errorDialog}
       >
         <div className={styles.errorBody}>
           <i className="pi pi-exclamation-triangle" />
           <p>
-            Please upload a <strong>PDF</strong> file only.
+            Please upload a <strong>PDF</strong> file only (.pdf).
             <br />
             <span className={styles.errorSub}>
               Other formats (Excel, Word, etc.) are not accepted.
@@ -239,7 +239,7 @@ const AddExtractionModal = ({ visible, onHide, onSubmit }) => {
         </div>
       </Dialog>
     </>
-  );
-};
+  )
+}
 
-export default AddExtractionModal;
+export default AddExtractionModal

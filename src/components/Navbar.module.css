@@ -17,48 +17,30 @@
 
 
 /* ─────────────────────────────────────────────
-   Left section
+   Left section — logo
 ───────────────────────────────────────────── */
 .left {
   display: flex;
   align-items: center;
-  gap: 12px;
 }
 
 
 .logo {
-  font-size: 18px;
-  font-weight: 700;
-  color: #E8192C;
   cursor: pointer;
   flex-shrink: 0;
-  letter-spacing: -0.02em;
 }
 
 
-.homeBtn {
-  color: #4A5568 !important;
-  width: 36px !important;
-  height: 36px !important;
-  padding: 0 !important;
-  border-radius: 6px !important;
-  transition: background 0.15s !important;
-}
-
-
-.homeBtn:hover {
-  background: #F4F6F9 !important;
-  color: #1A1A2E !important;
-}
-
-
-.homeBtn .p-button-icon {
-  font-size: 16px !important;
+.logo img {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 
 
 /* ─────────────────────────────────────────────
-   Right section
+   Right section — user trigger
 ───────────────────────────────────────────── */
 .right {
   display: flex;
@@ -66,13 +48,8 @@
 }
 
 
-/* wrapper gives the dropdown a positioning context */
-.userWrapper {
-  position: relative;
-}
-
-
-.userArea {
+/* clickable area: avatar + chevron */
+.userTrigger {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -80,16 +57,15 @@
   padding: 4px 8px;
   border-radius: 6px;
   transition: background 0.15s;
-  outline: none;
 }
 
 
-.userArea:hover,
-.userAreaActive {
+.userTrigger:hover {
   background: #F4F6F9;
 }
 
 
+/* user avatar circle */
 .avatar {
   width: 34px;
   height: 34px;
@@ -98,48 +74,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #ffffff;
   flex-shrink: 0;
 }
 
 
-.chevron {
-  color: #4A5568;
-  font-size: 11px;
-  transition: transform 0.2s;
+/* ─────────────────────────────────────────────
+   OverlayPanel inner layout
+───────────────────────────────────────────── */
+.overlayHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px 8px;
 }
 
 
-.chevronUp {
-  transform: rotate(180deg);
+.overlayName {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1A1A1A;
+}
+
+
+.overlayMenu {
+  padding: 4px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 
 /* ─────────────────────────────────────────────
-   Dropdown menu
+   Menu items
 ───────────────────────────────────────────── */
-.dropdownMenu {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 200px;
-  background: #ffffff;
-  border: 1px solid #E2E8F0;
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  padding: 6px;
-  z-index: 200;
-  animation: fadeSlideDown 0.15s ease;
-}
-
-
-@keyframes fadeSlideDown {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-
-/* ── menu item ── */
-.dropdownItem {
+.menuItem {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -157,58 +126,39 @@
 }
 
 
-.dropdownItem:hover {
+.menuItem:hover {
   background: #F4F6F9;
   color: #1A1A2E;
 }
 
 
-.dropdownItem i {
+.menuItem i {
   font-size: 14px;
   color: #6b7280;
   flex-shrink: 0;
 }
 
 
-.dropdownItem:hover i {
+.menuItem:hover i {
   color: #374151;
 }
 
 
-/* Google icon wrapper */
-.itemIconGoogle {
+/* Google SVG icon wrapper */
+.googleIconWrap {
   display: flex;
   align-items: center;
   flex-shrink: 0;
 }
 
 
-/* ── divider ── */
-.divider {
-  height: 1px;
-  background: #F1F5F9;
-  margin: 4px 0;
-}
-
-
-/* ── Log out: red tint on hover ── */
-.dropdownItemLogout:hover {
+/* Log out: red tint on hover */
+.menuItemLogout:hover {
   background: #fff5f5 !important;
   color: #E8192C !important;
 }
 
 
-.dropdownItemLogout:hover i {
+.menuItemLogout:hover i {
   color: #E8192C !important;
-}
-.initials {
-  color: white;
-  font-size: 12px;
-  font-weight: 600;
-}
-.logo img {
-  height: 28px;
-  width: auto;
-  object-fit: contain;
-  display: block;
 }

@@ -8,16 +8,21 @@ import styles from "./Dashboard.module.css";
 
 /**
  * Dashboard page — thin orchestration layer.
- * All state lives in useDashboard; UI is split into focused child components.
+ *
+ * "Add Extraction Request" button opens a modal dialog (not a full-page replace).
+ * All API integration is handled by useDashboard (table data) and
+ * AddExtractionModal (request-ID generation + create submission).
  */
 const Dashboard = () => {
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const {
     toastRef,
     filteredData,
     lastRefreshed,
     loading,
+    refreshOverlay,
+    nextRequestId,
     /* filters */
     filterBy,
     setFilterBy,
@@ -40,7 +45,7 @@ const Dashboard = () => {
     setSortOrder,
     /* handlers */
     handleRefresh,
-    handleSubmitRequest,
+    handleExtractionCreated,
     handleView,
     handleDownload,
     handleFileClick,
@@ -51,17 +56,27 @@ const Dashboard = () => {
     <div className={styles.page}>
       <Toast ref={toastRef} position="top-right" />
 
+      {/* Full-screen overlay shown for 2.5 s when Refresh is clicked */}
+      {refreshOverlay && (
+        <div className={styles.refreshOverlay}>
+          <div className={styles.refreshSpinnerBox}>
+            <i className="pi pi-spin pi-spinner" style={{ fontSize: "2.8rem" }} />
+            <p className={styles.refreshOverlayText}>Refreshing data…</p>
+          </div>
+        </div>
+      )}
+
       <div className={styles.container}>
-        {/* ── Header: title + action buttons + timestamp ── */}
+        {/* Header: title + action buttons + timestamp */}
         <ExtractionHeader
           count={filteredData.length}
           lastRefreshed={lastRefreshed}
           loading={loading}
           onRefresh={handleRefresh}
-          onAddRequest={() => setShowAddModal(true)}
+          onAddRequest={() => setShowModal(true)}
         />
 
-        {/* ── Data table with inline filters ── */}
+        {/* Data table with inline filters */}
         <ExtractionTable
           data={filteredData}
           loading={loading}
@@ -88,17 +103,18 @@ const Dashboard = () => {
           onDownload={handleDownload}
           onFileClick={handleFileClick}
         />
-
-        {/* ── Add Extraction Request modal ── */}
-        <AddExtractionModal
-          visible={showAddModal}
-          onHide={() => setShowAddModal(false)}
-          onSubmit={(file, reqId) => {
-            handleSubmitRequest(file, reqId);
-            setShowAddModal(false);
-          }}
-        />
       </div>
+
+      {/* Add Extraction Request modal
+          – nextRequestId is pre-fetched from the backend (always fresh)
+          – onExtractionCreated receives (requestId, File) and POSTs to the API
+          – the modal closes itself only on success (returns true) */}
+      <AddExtractionModal
+        visible={showModal}
+        onHide={() => setShowModal(false)}
+        nextRequestId={nextRequestId}
+        onExtractionCreated={handleExtractionCreated}
+      />
     </div>
   );
 };

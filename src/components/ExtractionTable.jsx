@@ -6,7 +6,6 @@ import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 import StatusBadge from "./StatusBadge";
 import {
-  REQUESTED_BY_OPTIONS,
   STATUS_OPTIONS,
   ROWS_PER_PAGE_OPTIONS,
 } from "../constants/tableOptions";
@@ -46,6 +45,14 @@ const ExtractionTable = ({
   onDownload,
   onFileClick,
 }) => {
+  /* ── "Requested By" options derived from live data (no hardcoded list) ── */
+  const requestedByOptions = [
+    { label: 'Select One', value: null },
+    ...[...new Set(data.map((r) => r.requestedBy))]
+      .sort()
+      .map((name) => ({ label: name, value: name })),
+  ]
+
   /* ── column body templates ── */
   const manifestFileBody = (row) => (
     <button className={styles.fileLink} onClick={() => onFileClick(row)}>
@@ -93,7 +100,7 @@ const ExtractionTable = ({
   const requestedByFilter = (
     <Dropdown
       value={filterBy}
-      options={REQUESTED_BY_OPTIONS}
+      options={requestedByOptions}
       onChange={(e) => {
         setFilterBy(e.value);
         setFirst(0);

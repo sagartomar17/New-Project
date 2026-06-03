@@ -11,6 +11,45 @@
 }
 
 
+/* ─── Refresh overlay loader ─── */
+.refreshOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: overlayFadeIn 0.2s ease;
+}
+
+.refreshSpinnerBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px 56px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  color: #1e3a5f;
+}
+
+.refreshOverlayText {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #1e3a5f;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+
 /* ─── Responsive ─── */
 @media (max-width: 768px) {
   .page {
